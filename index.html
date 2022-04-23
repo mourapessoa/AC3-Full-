@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Ac3</title>
+    </head>
+<body>
+    <div>
+        <h3>Ac3 - Full Stack</h3>
+        <h4> Faça um programa web em que  envie 2 parametros ao servidor flask utilizando jquery para o envio dos dados. 
+
+            Os parametros sao o nome do aluno e o email.
+            
+            Os parametros devem ser exibidos na tela em letra maiuscula, como resposta de que foi processado pelo servidor.
+            
+            Faça o mesmo envio tambem utilizando JSON.</h4>
+        <p> Digite os dados de Nome e Email no formulário abaixo: </p>
+    </div>
+
+<form action="/action_page.php">
+  <label for="fname">Nome:</label><br>
+  <input type="text" id="fname" name="fname" value=""><br>
+  <label for="lname">Email:</label><br>
+  <input type="text" id="lname" name="lname" value=""><br><br>
+  <input type="submit">
+</form> 
+
+
+<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script type="text/javascript">
+    $('#name_form').submit(function(e) {
+            e.preventDefault();
+
+            var data = {};
+            var Form = this;
+
+            $.each(this.elements, function(i, v) {
+                var input = $(v);
+                data[input.attr("name")] = input.val();
+                delete data["undefined"];
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/index',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                context: Form,
+                success: function(callback) {
+                    console.log(callback);
+                    // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                    $(this).text('Hello ' + callback.nome + ' ' + callback.email  + '!');
+                },
+                error: function() {
+                    $(this).html("error!");
+                }
+            });
+        });
+</script>
+</body>
+</html>
